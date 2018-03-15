@@ -1,0 +1,86 @@
+PID Understanding
+
+Code:
+
+static final double kP = #.###;		//Slows robot down as it reaches destination (90 degree turn)
+static final double kI = #.###;		//Detects the difference between current location and target
+static final double kD = #.###;		//Measures rate of change (Change in Time (y) / Change in Speed (x))
+static final double kF = #.###;		//Product of P and I
+
+P (Proportional):
+
+The robot's speed gets (exponentially?) slower as it reaches target destination
+(In our case, 90 degrees)
+
+Example:
+
+Initial Speed: 100% (Power)			Speed: 60% (Power)
+Initial Position: 0 (Degrees)		Position: 66.67 (Degrees)
+
+Speed: 25%							Final Speed: 0% (Power)
+Position: 27.78 (Degrees)			Target Position: 90 (Degrees)
+
+I (Integral)
+
+Finds the error (Difference between current position and target position)
+
+Example:
+
+Current Position: 30 (Degrees)		Current Position: 85 (Degrees)
+Target Position: 90 (Degrees)		Target Position: 90 (Degrees)
+Error: 60 (Degrees)					Error: 5 (Degrees)
+
+D (Derivative)
+
+Finds the rate of change (ROC) in the movement of the robot
+
+Example:
+
+Total Elapsed Time: 5 (Seconds)		Total Elapsed Time: 10 (Seconds)
+Current Speed: 50% (Power)			Current Speed: 20% (Power)
+Rate of Change: 5/50 = 1/10 (0.1)	Rate of Change: 10/20 = 1/2 (0.5)
+
+F (Filter)
+
+Allows the robot to slow down as the error decreases (the gap between the target
+position and the current position gets smaller)
+
+Example:
+
+Target Position: 20 (Degrees)
+(|1|2|3| = Degrees)
+
+Distance:	|0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|
+Power:		|100%	  |75%		|50%		   |25%		      |0%
+Error:		|20		  |15		|10			   |5			  |0
+
+Power drops at 4% per degree
+Error drops at 1 per degree
+
+THE GRAPH
+
+  100 O|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+      |||O||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+   90 ||||||O|||||||||||||||||||||||||||||||||||||||||||||||||||||||
+      |||||||||O||||||||||||||||||||||||||||||||||||||||||||||||||||
+   80 ||||||||||||O|||||||||||||||||||||||||||||||||||||||||||||||||
+      |||||||||||||||O||||||||||||||||||||||||||||||||||||||||||||||
+   70 ||||||||||||||||||O|||||||||||||||||||||||||||||||||||||||||||
+      |||||||||||||||||||||O||||||||||||||||||||||||||||||||||||||||
+   60 ||||||||||||||||||||||||O|||||||||||||||||||||||||||||||||||||
+      |||||||||||||||||||||||||||O||||||||||||||||||||||||||||||||||
+%  50 ||||||||||||||||||||||||||||||O|||||||||||||||||||||||||||||||
+      |||||||||||||||||||||||||||||||||O||||||||||||||||||||||||||||
+P  40 ||||||||||||||||||||||||||||||||||||O|||||||||||||||||||||||||
+O     |||||||||||||||||||||||||||||||||||||||O||||||||||||||||||||||
+W  30 ||||||||||||||||||||||||||||||||||||||||||O|||||||||||||||||||
+E     |||||||||||||||||||||||||||||||||||||||||||||O||||||||||||||||
+R  20 ||||||||||||||||||||||||||||||||||||||||||||||||O|||||||||||||
+      |||||||||||||||||||||||||||||||||||||||||||||||||||O||||||||||
+   10 ||||||||||||||||||||||||||||||||||||||||||||||||||||||O|||||||
+      |||||||||||||||||||||||||||||||||||||||||||||||||||||||||O||||
+      0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20
+	        D I S T A N C E   ( D E G R E E S )
+
+January 21, 2017
+-Christian Rua
